@@ -3,6 +3,8 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <set>
+#include <deque>
 
 #include "Classes.h"
 
@@ -22,16 +24,6 @@ struct Variable {
         return id < other.id;
     }
 };
-
-//struct Domain {
-//    vector<Subject> subjects;
-//    vector<Teacher> teachers;
-//    vector<Room> rooms;
-//
-//    size_t GetSize() const {
-//        return subjects.size() * teachers.size() * rooms.size();
-//    }
-//};
 
 struct Domain {
     Subject subject;
@@ -54,9 +46,36 @@ public:
 
 private:
 
-    bool Backtracking(map<Variable*, Domain*>& cur, map<Variable*, Domain*>& ans);
+    bool Backtracking(map<const Variable *, Domain *>& cur, map<const Variable *, Domain *>& ans);
 
-    vector<Variable> variables;
-    map<Variable*, vector<Domain>> domains;
+
+    bool check_constraints(map<const Variable *, Domain *>& cur);
+
+    bool check_constraints(map<const Variable *, Domain *>& cur, const Variable *variable1, Domain *domain1);
+
+    // Heuristics:
+
+    const Variable *SelectUnassignedVariable(map<const Variable *, Domain *>& cur);
+
+    vector<Domain *>& OrderDomainValues(vector<Domain *>& domains);
+
+    vector<Domain *>& LeastConstrainingValue_Heuristic(const Variable *variable, vector<Domain *>& domains);
+
+    const Variable *MRV_Heuristic(map<const Variable *, Domain *>& cur);
+
+    const Variable *Degree_Heuristic(map<const Variable *, Domain *>& cur);
+
+    void ForwardChecking(const Variable *variable, Domain *domain, map<const Variable *, Domain *>& cur);
+
+    void RemoveInconsistentDomains(const Variable *variable, Domain *domain, map<const Variable *, Domain *>& cur);
+
+    void UnRemoveInconsistentDomains(const Variable *variable);
+
+    deque<Variable> variables_storage;
+    set<const Variable *> free_variables;
+    deque<Domain> domains_storage;
+    map<const Variable *, vector<Domain *>> domains;
+    map<const Variable *, vector<Domain *>> tmp;
+    map<const Variable *, vector<Variable *>> variable_neighbours;
     size_t kLESSONS_PER_DAY;
 };

@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -O3   CMakeFiles/class_scheduling_csp.dir/main.cpp.o CMakeFiles/class_scheduling_csp.dir/src/CSP.cpp.o CMakeFiles/class_scheduling_csp.dir/src/Classes.cpp.o  -o class_scheduling_csp 

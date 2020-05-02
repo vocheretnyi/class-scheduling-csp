@@ -6,12 +6,13 @@
 #include "Classes.h"
 #include "CSP.h"
 #include "Schedule.h"
+#include "profile.h"
 
 using namespace std;
 
 const int TEACHERS_PER_SUBJECT = 4;
-const int SUBJECTS_PER_GROUP = 3;
-const int LESSONS_PER_DAY = 4;
+const int SUBJECTS_PER_GROUP = 7;
+const int LESSONS_PER_DAY = 3;
 
 template<typename T>
 static vector<T> GetRandomSubset(vector<T> vec, size_t len) {
@@ -29,22 +30,21 @@ static vector<Subject> GetRandomSubsetOfSubjects(const vector<Subject>& subjects
 
 int main() {
     vector<Day> days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"}; // 5
-//    days.resize(3);
     vector<Teacher> teachers = {
             Teacher("Merk"),
             Teacher("Margo"),
             Teacher("Fish"),
             Teacher("Roma"),
-//            Teacher("Pokemon"),
-//            Teacher("Biba"),
-//            Teacher("Nika"),
-//            Teacher("Vlad"),
+            Teacher("Pokemon"),
+            Teacher("Biba"),
+            Teacher("Nika"),
+            Teacher("Vlad"),
     }; // 8
     vector<Room> rooms = {
             Room(215, 30),
             Room(505, 35),
             Room(1, 27),
-//            Room(39, 100),
+            Room(39, 100),
             Room(303, 25),
             Room(27, 35),
     }; // 6
@@ -55,18 +55,33 @@ int main() {
             Subject("Discrete Math", GetRandomSubsetOfTeachers(teachers)),
             Subject("DataStorage science", GetRandomSubsetOfTeachers(teachers)),
             Subject("DataStorage structures", GetRandomSubsetOfTeachers(teachers)),
-//            Subject("Math Anal.", GetRandomSubsetOfTeachers(teachers)),
-//            Subject("Prob. Th.", GetRandomSubsetOfTeachers(teachers)),
-//            Subject("Algorithms", GetRandomSubsetOfTeachers(teachers)),
+            Subject("Math Anal.", GetRandomSubsetOfTeachers(teachers)),
+            Subject("Prob. Th.", GetRandomSubsetOfTeachers(teachers)),
+            Subject("Algorithms", GetRandomSubsetOfTeachers(teachers)),
     }; // 9
     vector<Group> groups = {
             Group("TTP-42", GetRandomSubsetOfSubjects(subjects), 20),
             Group("TTP-41", GetRandomSubsetOfSubjects(subjects), 30),
             Group("MI-4", GetRandomSubsetOfSubjects(subjects), 26),
-            Group("TK-4", GetRandomSubsetOfSubjects(subjects), 20),
+//            Group("TK-4", GetRandomSubsetOfSubjects(subjects), 20),
+//            Group("OM-4", GetRandomSubsetOfSubjects(subjects), 20),
     };
 
-//    DataStorage data(groups, subjects, rooms, teachers, days, LESSONS_PER_DAY);
+    {
+        LOG_DURATION("test");
+        int cnt = 0;
+        for (int i = 0; i < 100; ++i) {
+            CSPSolver cspSolver;
+            cspSolver.SetVariables(groups, days, LESSONS_PER_DAY);
+            cspSolver.SetDomains(rooms);
+            auto schedule = cspSolver.Solve().schedule;
+            bool found = schedule.size() > 0;
+            cnt += !found;
+        }
+        cout << "Not found: " << cnt << "\n";
+    }
+//    return 0;
+
     CSPSolver cspSolver;
     cspSolver.SetVariables(groups, days, LESSONS_PER_DAY);
     cspSolver.SetDomains(rooms);
