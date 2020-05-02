@@ -2,7 +2,7 @@
 
 Solving Class Scheduling problem using the CSP method.
 
-###Input:
+### Input:
 At **main.cpp** you can manually create any of objects:
 - Group
 - Teacher
@@ -12,7 +12,7 @@ At **main.cpp** you can manually create any of objects:
 
 ![](images/input.png)
 
-###Used heuristics:
+### Used heuristics:
 - Forward Checking
 - Minimum Remaining Values Heuristic
 - Degree Heuristic
@@ -39,5 +39,3 @@ Example of the part of the generated output:
 Monday                        |  Tuesday
 :----------------------------:|:---------------------------------:
 ![](images/1.png) |  ![](images/2.png)
-
-You can see the first line:
